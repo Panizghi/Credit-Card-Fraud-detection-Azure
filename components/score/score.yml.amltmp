@@ -1,0 +1,27 @@
+# <component>
+name: score_credit_defaults_model
+display_name: Score Credit Defaults Model
+# version: 1 # Not specifying a version will automatically update the version
+type: command
+inputs:
+  model:
+    type: uri_folder
+  test_data: 
+    type: uri_folder
+
+outputs:
+ confusion_matrix:
+  type: uri_folder
+ 
+code: ./score.py
+environment:
+  # for this step, we'll use an AzureML curate environment
+  azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu:21
+command: >-
+  python train.py 
+  --train_data ${{inputs.train_data}} 
+  --test_data ${{inputs.test_data}} 
+  --learning_rate ${{inputs.learning_rate}}
+  --registered_model_name ${{inputs.registered_model_name}}
+  --model ${{outputs.model}}
+# </component>
